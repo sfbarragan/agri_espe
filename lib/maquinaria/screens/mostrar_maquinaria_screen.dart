@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:agri_espe/maquinaria/screens/editar_maquinaria_screen.dart';
+import 'package:agri_espe/maquinaria/screens/insert_maquinaria_screen.dart';
 import 'package:agri_espe/maquinaria/widgets/Datos_Maquinaria.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -80,7 +82,7 @@ class MostrarMaquinariaScreenState extends State<MostrarMaquinariaScreen> {
         mainAxisAlignment : MainAxisAlignment.end,
         children: [
           FloatingActionButton(onPressed: (){
-            //Navigator.push(context, MaterialPageRoute(builder: (context)=>InsertPesticidasScreen()));
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>InsertMaquinariaScreen()));
           },
           heroTag: "",
           child: Text('+', style: TextStyle(fontSize:30),),),
@@ -196,7 +198,10 @@ class MostrarMaquinariaScreenState extends State<MostrarMaquinariaScreen> {
                                       textStyle: const TextStyle(fontSize: 20),
                                     ),
                                     onPressed: (){
-                                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>(EditarEmpleadosScreen())));
+                                      setState(() {
+                                        globals.maquinaria_index = globals.maquinarias[index].id;
+                                      });
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>(EditarMaquinariaScreen())));
                                     },
                                     child: Text("Editar", style:TextStyle(fontSize: 18)),
                                   ),

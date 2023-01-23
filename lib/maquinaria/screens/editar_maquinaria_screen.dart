@@ -1,34 +1,24 @@
 import 'dart:convert';
 
+import 'package:agri_espe/maquinaria/screens/mostrar_maquinaria_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:agri_espe/var_globals.dart' as globals;
 
-import 'mostrar_empleados_screen.dart';
-
-class EditarEmpleadosScreen extends StatefulWidget {
-  const EditarEmpleadosScreen({Key? key}) : super(key: key);
+class EditarMaquinariaScreen extends StatefulWidget {
+  const EditarMaquinariaScreen({Key? key}) : super(key: key);
 
   @override
-  State<EditarEmpleadosScreen> createState() => EditarEmpleadosScreenState();
+  State<EditarMaquinariaScreen> createState() => EditarMaquinariaScreenState();
 }
 
-class EditarEmpleadosScreenState extends State<EditarEmpleadosScreen> {
-  TextEditingController  cedulaCtrl = new TextEditingController();
+class EditarMaquinariaScreenState extends State<EditarMaquinariaScreen> {
+  TextEditingController  tipoCtrl = new TextEditingController();
   TextEditingController  nombreCtrl = new TextEditingController();
-  TextEditingController  edadCtrl = new TextEditingController();
-  TextEditingController  sueldoCtrl = new TextEditingController();
+  TextEditingController  marcaCtrl = new TextEditingController();
+  TextEditingController  estadoCtrl = new TextEditingController();
+
   List<bool> _validate = [false, false, false, false];
-
-  _inition(){
-    setState(() {
-      cedulaCtrl.text = globals.empleados[globals.empleado_index-1].cedula ;
-      nombreCtrl.text = globals.empleados[globals.empleado_index-1].nombre;
-      edadCtrl.text = globals.empleados[globals.empleado_index-1].edad.toString();
-      sueldoCtrl.text = globals.empleados[globals.empleado_index-1].sueldo.toString();
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -40,14 +30,21 @@ class EditarEmpleadosScreenState extends State<EditarEmpleadosScreen> {
     super.dispose();
   }
 
+  _inition(){
+    setState(() {
+      nombreCtrl.text = globals.maquinarias[globals.maquinaria_index-1].nombre ;
+      tipoCtrl.text = globals.maquinarias[globals.maquinaria_index-1].tipo;
+      marcaCtrl.text = globals.maquinarias[globals.maquinaria_index-1].marca;
+      estadoCtrl.text = globals.maquinarias[globals.maquinaria_index-1].estado;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double vwidth = MediaQuery.of(context).size.width;
     double vheight = MediaQuery.of(context).size.height;
     return Scaffold(
-       appBar: AppBar(
-        title: Text('Editar Empleado'),
-      ),
+      appBar: AppBar(title: Text('Edición de Maquinarias')),
       body: Column(
         children: [
           Container(
@@ -58,30 +55,9 @@ class EditarEmpleadosScreenState extends State<EditarEmpleadosScreen> {
                   margin: EdgeInsets.only(top:20),
                   width: vwidth*0.9,
                   child: TextField(
-                    controller: cedulaCtrl,
-                    decoration: new InputDecoration(
-                      errorText: _validate[0] ? 'Este campo es requerido' : null,
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Color.fromARGB(255, 0, 38, 87)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Color.fromARGB(255, 0, 38, 87)),
-                        ),
-                      labelText: 'Cedula',
-                    ),
-                      keyboardType: TextInputType.text,
-                      onChanged:(cedulaCtrl){
-                        _validate[0] = false;
-                      } ,
-                    ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top:20),
-                  width: vwidth*0.9,
-                  child: TextField(
                     controller: nombreCtrl,
                     decoration: new InputDecoration(
-                      errorText: _validate[1] ? 'Este campo es requerido' : null,
+                      errorText: _validate[0] ? 'Este campo es requerido' : null,
                       enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(width: 1, color: Color.fromARGB(255, 0, 38, 87)),
                         ),
@@ -92,6 +68,27 @@ class EditarEmpleadosScreenState extends State<EditarEmpleadosScreen> {
                     ),
                       keyboardType: TextInputType.text,
                       onChanged:(nombreCtrl){
+                        _validate[0] = false;
+                      } ,
+                    ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top:20),
+                  width: vwidth*0.9,
+                  child: TextField(
+                    controller: tipoCtrl,
+                    decoration: new InputDecoration(
+                      errorText: _validate[1] ? 'Este campo es requerido' : null,
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 1, color: Color.fromARGB(255, 0, 38, 87)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 1, color: Color.fromARGB(255, 0, 38, 87)),
+                        ),
+                      labelText: 'Tipo',
+                    ),
+                      keyboardType: TextInputType.text,
+                      onChanged:(tipoCtrl){
                         _validate[1] = false;
                       } ,
                     ),
@@ -100,7 +97,7 @@ class EditarEmpleadosScreenState extends State<EditarEmpleadosScreen> {
                   margin: EdgeInsets.only(top:20),
                   width: vwidth*0.9,
                   child: TextField(
-                    controller: edadCtrl,
+                    controller: marcaCtrl,
                     decoration: new InputDecoration(
                       errorText: _validate[2] ? 'Este campo es requerido' : null,
                       enabledBorder: OutlineInputBorder(
@@ -109,10 +106,10 @@ class EditarEmpleadosScreenState extends State<EditarEmpleadosScreen> {
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(width: 1, color: Color.fromARGB(255, 0, 38, 87)),
                         ),
-                      labelText: 'Edad',
+                      labelText: 'Marca',
                     ),
                       keyboardType: TextInputType.text,
-                      onChanged:(edadCtrl){
+                      onChanged:(marcaCtrl){
                         _validate[2] = false;
                       } ,
                     ),
@@ -121,7 +118,7 @@ class EditarEmpleadosScreenState extends State<EditarEmpleadosScreen> {
                   margin: EdgeInsets.only(top:20),
                   width: vwidth*0.9,
                   child: TextField(
-                    controller: sueldoCtrl,
+                    controller: estadoCtrl,
                     decoration: new InputDecoration(
                       errorText: _validate[3] ? 'Este campo es requerido' : null,
                       enabledBorder: OutlineInputBorder(
@@ -130,10 +127,10 @@ class EditarEmpleadosScreenState extends State<EditarEmpleadosScreen> {
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(width: 1, color: Color.fromARGB(255, 0, 38, 87)),
                         ),
-                      labelText: 'Sueldo',
+                      labelText: 'Estado',
                     ),
                       keyboardType: TextInputType.text,
-                      onChanged:(sueldoCtrl){
+                      onChanged:(estadoCtrl){
                         _validate[3] = false;
                       } ,
                     ),
@@ -144,29 +141,29 @@ class EditarEmpleadosScreenState extends State<EditarEmpleadosScreen> {
                   ),
                 ElevatedButton(
                   onPressed: () async {
-                    if(cedulaCtrl.text.isEmpty){
+                    if(nombreCtrl.text.isEmpty){
                       setState(() {
                         _validate[0] = true;
                       });
                     }
-                    if(nombreCtrl.text.isEmpty){
+                    if(tipoCtrl.text.isEmpty){
                       setState(() {
                         _validate[1] = true;
                       });
                     }
-                    if(edadCtrl.text.isEmpty){
+                    if(marcaCtrl.text.isEmpty){
                       setState(() {
                         _validate[2] = true;
                       });
                     }
-                    if(sueldoCtrl.text.isEmpty){
+                    if(estadoCtrl.text.isEmpty){
                       setState(() {
                         _validate[3] = true;
                       });
                     }
                     if(_validate[0] == false && _validate[1] == false && _validate[2] == false && _validate[3] == false){
                       try {
-                        var url = Uri.parse('http://localhost:9093/empleados/update/${globals.empleados[globals.empleado_index-1].id}?src=mysql');
+                        var url = Uri.parse('http://localhost:9093/maquinaria/update/${globals.maquinarias[globals.maquinaria_index-1].id}?src=mysql');
                         print(url);
                         final headers = {
                           "Access-Control-Allow-Origin": "*",
@@ -174,14 +171,16 @@ class EditarEmpleadosScreenState extends State<EditarEmpleadosScreen> {
                           'Accept': '*/*'
                         };
                         final body =  jsonEncode(<String, String>{
-                          "cedula": "${cedulaCtrl.text}",
                           "nombre": "${nombreCtrl.text}",
-                          "edad": "${edadCtrl.text}",
-                          "sueldo": "${sueldoCtrl.text}"
+                          "tipo": "${tipoCtrl.text}",
+                          "marca": "${marcaCtrl.text}",
+                          "estado": "${estadoCtrl.text}",
+                          "id_empleado": "${globals.maquinarias[globals.maquinaria_index].id_empleado}"
                         });
                         final response = await http.put(url, headers: headers, body:body);
-                          print(response.statusCode);
-                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const MostrarEmpleadosScreen()), (Route<dynamic> route) => false);
+                        print(response.statusCode);
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const MostrarMaquinariaScreen()), (Route<dynamic> route) => false);
+
                         if (response.statusCode == 200) {
                         }
                       } catch (e) {
@@ -190,7 +189,7 @@ class EditarEmpleadosScreenState extends State<EditarEmpleadosScreen> {
                     }
                   },
                   child: const Text(
-                    'Actualizar',
+                    'Registrar',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
